@@ -7,36 +7,37 @@ class MultiKeyDict():
         self._keys
 
 
-class Controller(vg.VX350Gamepad):
+class Controller(vg.VX360Gamepad):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.active_commands = []
         self.command_map = {
-            ("forward", "run", "go"): self.forward(),
-            ("backward", "run away", "flee", "bounce"): self.backward(),
-            ("stop", "halt"): self.stop(),
-            ("roll"): self.roll(),
-            ("back", "backstep"): self.backstep(),
-            ("sprint", "dash"): self.sprint(),
-            ("jump"): self.jump(),
-            ("right", "look right"): self.look_right(),
-            ("left", "look left"): self.look_left(),
-            ("turn"): self.turn(),
-            ("lock-on", "lock", "lock on"): self.lock(),
-            ("light attack", "swing", "hit"): self.light_attack(),
-            ("heavy attack", "big swing"): self.heavy_attack(),
-            ("attack"): self.attack(),
-            ("charge attack"): self.charge_attack(),
-            ("spell", "magic", "pray"): self.spell(),
-            ("interact", "take", "pickup", "grab", "talk", "talk to", "speak"): self.interact(),
-            ("use item", "use", "heal"): self.use_item(),
+            ("forward", "run", "go"): self.forward,
+            ("backward", "run away", "flee", "bounce"): self.backward,
+            ("stop", "halt"): self.stop,
+            # ("roll"): self.roll,
+            # ("back", "backstep"): self.backstep,
+            # ("sprint", "dash"): self.sprint,
+            # ("jump"): self.jump,
+            # ("right", "look right"): self.look_right,
+            # ("left", "look left"): self.look_left,
+            # ("turn"): self.turn,
+            # ("lock-on", "lock", "lock on"): self.lock,
+            # ("light attack", "swing", "hit"): self.light_attack,
+            # ("heavy attack", "big swing"): self.heavy_attack,
+            # ("attack"): self.attack,
+            # ("charge attack"): self.charge_attack,
+            # ("spell", "magic", "pray"): self.spell,
+            # ("interact", "take", "pickup", "grab", "talk", "talk to", "speak"): self.interact,
+            # ("use item", "use", "heal"): self.use_item,
         }
 
     def execute_command(self, command):
         for shortcuts, method in self.command_map.items():
             if command in shortcuts:
                 method()
-                break
+                return
+        print("Invalid command!")
 
     def forward(self):
         self.left_joystick(x_value=0, y_value=-32768)
@@ -95,9 +96,7 @@ Commands:
         - use item: use, heal
             """)
             continue
-        elif command not in gamepad.command_map:
-            print("Invalid command!")
-            continue
+        gamepad.execute_command(command)
 
 
 if __name__ == "__main__":
